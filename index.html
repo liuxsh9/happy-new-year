@@ -146,8 +146,8 @@ html, body {
 
 /* Layer depths and sizes */
 .layer--sky {
-  width: 160%;
-  height: 160%;
+  width: 200%;
+  height: 200%;
   transform: translate(-50%, -50%) translateZ(-300px);
 }
 
@@ -175,8 +175,8 @@ html, body {
 }
 
 .layer--foreground {
-  width: 280%;
-  height: 280%;
+  width: 200%;
+  height: 200%;
   transform: translate(-50%, -50%) translateZ(200px);
 }
 
@@ -184,20 +184,25 @@ html, body {
 
 .sky-gradient {
   position: absolute;
-  inset: 0;
+  inset: -20%;
   background:
+    radial-gradient(ellipse 80% 50% at 50% 40%, rgba(200, 60, 30, 0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 30% 50%, rgba(255, 150, 30, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 70% 50%, rgba(255, 150, 30, 0.2) 0%, transparent 60%),
     linear-gradient(
       to bottom,
-      #0b0e2a 0%,
-      #1a1040 15%,
-      #2d1854 25%,
-      #5c2248 35%,
-      #a03040 45%,
-      #d45030 55%,
-      #e87830 62%,
-      #d45030 70%,
-      #4a1828 85%,
-      #0a0408 100%
+      #1a0818 0%,
+      #2a102a 10%,
+      #4a1830 20%,
+      #8c2030 32%,
+      #c83828 42%,
+      #e06828 50%,
+      #f0a030 58%,
+      #e07828 65%,
+      #c04828 72%,
+      #6a2020 82%,
+      #2a0c10 92%,
+      #120408 100%
     );
 }
 
@@ -361,12 +366,12 @@ html, body {
 
       <!-- L2: Mid-ground buildings -->
       <div class="layer layer--buildings">
-        <img src="assets/L2-buildings.png" alt="" loading="eager">
+        <img src="assets/L2-buildings.webp" alt="" loading="eager">
       </div>
 
       <!-- L3: Horse (main visual) -->
       <div class="layer layer--horse">
-        <img src="assets/L3-horse.png" alt="" loading="eager">
+        <img src="assets/L3-horse.webp" alt="" loading="eager">
       </div>
 
       <!-- L4: Blessing text -->
@@ -378,7 +383,7 @@ html, body {
       <!-- L5: Foreground plum branches + petals -->
       <div class="layer layer--foreground">
         <div class="plum-branch">
-          <img src="assets/L5-plum-branch.png" alt="" loading="eager">
+          <img src="assets/L5-plum-branch.webp" alt="" loading="eager">
         </div>
         <div class="petals-container" id="petalsContainer"></div>
       </div>
