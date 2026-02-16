@@ -144,10 +144,15 @@ html, body {
   object-fit: cover;
 }
 
-/* Edge fade mask for image layers */
-.layer--has-image {
-  -webkit-mask-image: radial-gradient(ellipse 70% 70% at center, #000 50%, transparent 100%);
-  mask-image: radial-gradient(ellipse 70% 70% at center, #000 50%, transparent 100%);
+/* Edge fade mask for background/foreground layers only (not the horse) */
+.layer--edge-fade {
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at center, #000 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 70% at center, #000 60%, transparent 100%);
+}
+
+/* Crush near-black JPEG artifacts to true black for clean screen blending */
+.layer--screen-img img {
+  filter: brightness(1.05) contrast(1.4);
 }
 
 /* Layer depths and sizes */
@@ -382,12 +387,12 @@ html, body {
       </div>
 
       <!-- L2: Mid-ground buildings -->
-      <div class="layer layer--buildings layer--has-image">
+      <div class="layer layer--buildings layer--edge-fade layer--screen-img">
         <img src="assets/L2-buildings-opt.jpg" alt="" loading="eager">
       </div>
 
       <!-- L3: Horse (main visual) -->
-      <div class="layer layer--horse layer--has-image">
+      <div class="layer layer--horse layer--screen-img">
         <img src="assets/L3-horse-opt.jpg" alt="" loading="eager">
       </div>
 
@@ -398,7 +403,7 @@ html, body {
       </div>
 
       <!-- L5: Foreground plum branches + petals -->
-      <div class="layer layer--foreground layer--has-image">
+      <div class="layer layer--foreground layer--edge-fade layer--screen-img">
         <div class="plum-branch">
           <img src="assets/L5-plum-branch-opt.jpg" alt="" loading="eager">
         </div>
