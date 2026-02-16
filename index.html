@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta property="og:title" content="马年大吉 | 新春快乐">
+<meta property="og:description" content="2026丙午马年，万事如意，马到成功！点击查收你的新春祝福">
+<meta property="og:image" content="assets/og-thumbnail.png">
+<meta property="og:type" content="website">
+<title>马年大吉 - 新春快乐</title>
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0408;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ===== Lucky Bag Entrance ===== */
+
+.entrance {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #1a0a0e 0%, #0a0408 100%);
+  cursor: pointer;
+  transition: opacity 0.6s ease;
+}
+
+.entrance.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lucky-bag {
+  width: 160px;
+  height: 180px;
+  position: relative;
+  animation: float 3s ease-in-out infinite;
+}
+
+.lucky-bag svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 30px rgba(255, 180, 50, 0.4));
+}
+
+.entrance-text {
+  margin-top: 32px;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 16px;
+  color: rgba(255, 210, 130, 0.8);
+  letter-spacing: 4px;
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ===== Golden Flash Overlay ===== */
+
+.flash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at center, #ffd700 0%, #ff8c00 40%, transparent 70%);
+}
+
+.flash-overlay.active {
+  animation: flash-burst 1.5s ease-out forwards;
+}
+
+@keyframes flash-burst {
+  0% { opacity: 0; transform: scale(0.3); }
+  20% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(2.5); }
+}
+
+/* ===== 3D Parallax Scene ===== */
+
+.scene-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1s ease 0.5s;
+}
+
+.scene-wrapper.visible {
+  opacity: 1;
+}
+
+.scene {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  perspective: 1000px;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.scene-rotator {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160%;
+  height: 160%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Edge fade mask for image layers */
+.layer--has-image {
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at center, #000 50%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 70% at center, #000 50%, transparent 100%);
+}
+
+/* Layer depths */
+.layer--sky {
+  transform: translate(-50%, -50%) translateZ(-300px);
+}
+
+.layer--buildings {
+  transform: translate(-50%, -50%) translateZ(-150px);
+  mix-blend-mode: screen;
+}
+
+.layer--buildings img {
+  mix-blend-mode: screen;
+}
+
+.layer--horse {
+  transform: translate(-50%, -50%) translateZ(0px);
+  mix-blend-mode: screen;
+}
+
+.layer--horse img {
+  mix-blend-mode: screen;
+}
+
+.layer--text {
+  transform: translate(-50%, -50%) translateZ(40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 55%;
+}
+
+.layer--foreground {
+  transform: translate(-50%, -50%) translateZ(200px);
+  mix-blend-mode: screen;
+}
+
+.layer--foreground img {
+  mix-blend-mode: screen;
+}
+
+/* ===== L1: Sky + Mountains ===== */
+
+.sky-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      #0b0e2a 0%,
+      #1a1040 15%,
+      #2d1854 25%,
+      #5c2248 35%,
+      #a03040 45%,
+      #d45030 55%,
+      #e87830 62%,
+      #d45030 70%,
+      #4a1828 85%,
+      #0a0408 100%
+    );
+}
+
+.mountains {
+  position: absolute;
+  bottom: 20%;
+  left: 0;
+  width: 100%;
+  height: 40%;
+}
+
+.mountains svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== L4: Blessing Text ===== */
+
+.blessing-main {
+  font-family: "STKaiti", "KaiTi", "楷体", serif;
+  font-size: clamp(42px, 10vw, 72px);
+  font-weight: bold;
+  background: linear-gradient(180deg, #ffe8a0 0%, #ffd700 30%, #e8a020 60%, #c87820 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 8px rgba(255, 200, 50, 0.5)) drop-shadow(0 0 30px rgba(255, 150, 30, 0.3));
+  letter-spacing: 12px;
+  line-height: 1.3;
+}
+
+.blessing-sub {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: clamp(14px, 3.5vw, 22px);
+  color: rgba(255, 210, 130, 0.7);
+  letter-spacing: 6px;
+  margin-top: 12px;
+}
+
+/* ===== L5: Petals ===== */
+
+.petals-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  top: -40px;
+  left: var(--x);
+  opacity: var(--opacity);
+  border-radius: 50% 0 50% 0;
+  background: radial-gradient(ellipse at 30% 30%, #ffb0c0, #e87090);
+  animation:
+    petal-fall var(--duration) linear var(--delay) infinite,
+    petal-sway var(--sway-duration) ease-in-out var(--delay) infinite,
+    petal-spin var(--spin-duration) linear var(--delay) infinite;
+  will-change: transform;
+}
+
+@keyframes petal-fall {
+  0% { top: -40px; }
+  100% { top: 110vh; }
+}
+
+@keyframes petal-sway {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(var(--sway-x)); }
+  75% { transform: translateX(calc(var(--sway-x) * -1)); }
+}
+
+@keyframes petal-spin {
+  0% { rotate: 0deg; }
+  100% { rotate: 360deg; }
+}
+
+/* ===== L5: Plum branch foreground ===== */
+
+.plum-branch {
+  position: absolute;
+  inset: 0;
+}
+
+.plum-branch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+}
+</style>
+</head>
+<body>
+
+<!-- Entrance: Lucky Bag -->
+<div class="entrance" id="entrance">
+  <div class="lucky-bag">
+    <svg viewBox="0 0 160 180" xmlns="http://www.w3.org/2000/svg">
+      <!-- Bag body -->
+      <defs>
+        <linearGradient id="bag-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e83030"/>
+          <stop offset="50%" stop-color="#c82020"/>
+          <stop offset="100%" stop-color="#901818"/>
+        </linearGradient>
+        <linearGradient id="gold-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffe88a"/>
+          <stop offset="50%" stop-color="#ffd700"/>
+          <stop offset="100%" stop-color="#c8a020"/>
+        </linearGradient>
+        <radialGradient id="bag-sheen" cx="0.35" cy="0.3" r="0.6">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+      </defs>
+      <!-- Bag body shape -->
+      <path d="M30,60 Q28,90 25,140 Q24,165 80,170 Q136,165 135,140 Q132,90 130,60 Z" fill="url(#bag-grad)" stroke="#a01818" stroke-width="1"/>
+      <path d="M30,60 Q28,90 25,140 Q24,165 80,170 Q136,165 135,140 Q132,90 130,60 Z" fill="url(#bag-sheen)"/>
+      <!-- Gathered top -->
+      <path d="M30,60 Q45,45 55,50 Q65,55 80,40 Q95,55 105,50 Q115,45 130,60" fill="url(#bag-grad)" stroke="#a01818" stroke-width="1"/>
+      <!-- Drawstring knot -->
+      <ellipse cx="80" cy="52" rx="18" ry="10" fill="url(#gold-grad)" stroke="#b8901a" stroke-width="0.5"/>
+      <path d="M65,52 Q72,38 80,42 Q88,38 95,52" fill="none" stroke="#dab030" stroke-width="3" stroke-linecap="round"/>
+      <!-- 福 character -->
+      <text x="80" y="128" text-anchor="middle" font-family="STKaiti, KaiTi, serif" font-size="48" font-weight="bold" fill="url(#gold-grad)">福</text>
+      <!-- Decorative tassels -->
+      <line x1="68" y1="52" x2="58" y2="30" stroke="#dab030" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="58" cy="27" r="4" fill="#ffd700"/>
+      <line x1="92" y1="52" x2="102" y2="30" stroke="#dab030" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="102" cy="27" r="4" fill="#ffd700"/>
+    </svg>
+  </div>
+  <div class="entrance-text">轻触打开新春福袋</div>
+</div>
+
+<!-- Flash overlay -->
+<div class="flash-overlay" id="flashOverlay"></div>
+
+<!-- 3D Parallax Scene -->
+<div class="scene-wrapper" id="sceneWrapper">
+  <div class="scene">
+    <div class="scene-rotator" id="sceneRotator">
+
+      <!-- L1: Sky + Mountains -->
+      <div class="layer layer--sky">
+        <div class="sky-gradient"></div>
+        <div class="mountains">
+          <svg viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Far mountains (darker) -->
+            <path d="M0,280 Q100,180 200,220 Q300,150 400,200 Q500,120 600,190 Q700,140 800,210 Q900,160 1000,200 Q1100,170 1200,230 L1200,400 L0,400 Z" fill="#1a0e1e" opacity="0.7"/>
+            <!-- Near mountains -->
+            <path d="M0,320 Q150,230 250,270 Q350,210 500,260 Q600,200 700,250 Q850,190 950,240 Q1050,210 1200,280 L1200,400 L0,400 Z" fill="#120a16" opacity="0.9"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- L2: Mid-ground buildings -->
+      <div class="layer layer--buildings layer--has-image">
+        <img src="assets/L2-buildings-opt.jpg" alt="" loading="eager">
+      </div>
+
+      <!-- L3: Horse (main visual) -->
+      <div class="layer layer--horse layer--has-image">
+        <img src="assets/L3-horse-opt.jpg" alt="" loading="eager">
+      </div>
+
+      <!-- L4: Blessing text -->
+      <div class="layer layer--text">
+        <div class="blessing-main">新春快乐</div>
+        <div class="blessing-sub">丙午马年 · 贰零贰陆</div>
+      </div>
+
+      <!-- L5: Foreground plum branches + petals -->
+      <div class="layer layer--foreground layer--has-image">
+        <div class="plum-branch">
+          <img src="assets/L5-plum-branch-opt.jpg" alt="" loading="eager">
+        </div>
+        <div class="petals-container" id="petalsContainer"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== Config =====
+  const MAX_ROTATION = 15; // degrees
+  const LERP_FACTOR = 0.08;
+  const PETAL_COUNT = 18;
+
+  // ===== State =====
+  let targetRotateX = 0;
+  let targetRotateY = 0;
+  let currentRotateX = 0;
+  let currentRotateY = 0;
+  let inputMode = 'none'; // 'gyro', 'touch', 'mouse'
+  let isSceneActive = false;
+
+  // ===== DOM =====
+  const entrance = document.getElementById('entrance');
+  const flashOverlay = document.getElementById('flashOverlay');
+  const sceneWrapper = document.getElementById('sceneWrapper');
+  const sceneRotator = document.getElementById('sceneRotator');
+  const petalsContainer = document.getElementById('petalsContainer');
+
+  // ===== Entrance: Lucky Bag =====
+  entrance.addEventListener('click', handleEntranceClick);
+  entrance.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    handleEntranceClick();
+  }, { once: true });
+
+  let entranceHandled = false;
+
+  async function handleEntranceClick() {
+    if (entranceHandled) return;
+    entranceHandled = true;
+
+    // Try to get gyroscope permission (iOS)
+    let gyroGranted = false;
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      try {
+        const permission = await DeviceOrientationEvent.requestPermission();
+        gyroGranted = (permission === 'granted');
+      } catch (e) {
+        gyroGranted = false;
+      }
+    } else if (typeof DeviceOrientationEvent !== 'undefined' && /Mobi|Android/i.test(navigator.userAgent)) {
+      gyroGranted = true;
+    }
+
+    // Start transition
+    flashOverlay.classList.add('active');
+    entrance.classList.add('hidden');
+
+    setTimeout(function() {
+      sceneWrapper.classList.add('visible');
+      isSceneActive = true;
+
+      // Init input
+      if (gyroGranted) {
+        initGyroscope();
+      } else if ('ontouchstart' in window) {
+        initTouch();
+      } else {
+        initMouse();
+      }
+
+      // Start petals
+      createPetals();
+
+      // Start render loop
+      requestAnimationFrame(renderLoop);
+    }, 600);
+
+    // Clean up entrance after transition
+    setTimeout(function() {
+      entrance.style.display = 'none';
+      flashOverlay.style.display = 'none';
+    }, 2500);
+  }
+
+  // ===== Gyroscope Input =====
+  function initGyroscope() {
+    inputMode = 'gyro';
+    window.addEventListener('deviceorientation', function(e) {
+      if (e.beta === null || e.gamma === null) return;
+      // beta: front-back tilt (-180..180), gamma: left-right tilt (-90..90)
+      targetRotateX = clamp(e.beta - 45, -MAX_ROTATION, MAX_ROTATION) * -1;
+      targetRotateY = clamp(e.gamma, -MAX_ROTATION, MAX_ROTATION);
+    });
+  }
+
+  // ===== Touch Fallback =====
+  function initTouch() {
+    inputMode = 'touch';
+    window.addEventListener('touchmove', function(e) {
+      var touch = e.touches[0];
+      var cx = window.innerWidth / 2;
+      var cy = window.innerHeight / 2;
+      var dx = (touch.clientX - cx) / cx;
+      var dy = (touch.clientY - cy) / cy;
+      targetRotateX = clamp(dy * -MAX_ROTATION, -MAX_ROTATION, MAX_ROTATION);
+      targetRotateY = clamp(dx * MAX_ROTATION, -MAX_ROTATION, MAX_ROTATION);
+    }, { passive: true });
+  }
+
+  // ===== Mouse Fallback =====
+  function initMouse() {
+    inputMode = 'mouse';
+    window.addEventListener('mousemove', function(e) {
+      var cx = window.innerWidth / 2;
+      var cy = window.innerHeight / 2;
+      var dx = (e.clientX - cx) / cx;
+      var dy = (e.clientY - cy) / cy;
+      targetRotateX = clamp(dy * -MAX_ROTATION, -MAX_ROTATION, MAX_ROTATION);
+      targetRotateY = clamp(dx * MAX_ROTATION, -MAX_ROTATION, MAX_ROTATION);
+    });
+  }
+
+  // ===== Render Loop =====
+  function renderLoop() {
+    if (!isSceneActive) return;
+
+    // Lerp smoothing
+    currentRotateX += (targetRotateX - currentRotateX) * LERP_FACTOR;
+    currentRotateY += (targetRotateY - currentRotateY) * LERP_FACTOR;
+
+    sceneRotator.style.transform =
+      'rotateX(' + currentRotateX + 'deg) rotateY(' + currentRotateY + 'deg)';
+
+    requestAnimationFrame(renderLoop);
+  }
+
+  // ===== Petals =====
+  function createPetals() {
+    for (var i = 0; i < PETAL_COUNT; i++) {
+      var petal = document.createElement('div');
+      petal.className = 'petal';
+      var size = 8 + Math.random() * 14;
+      petal.style.setProperty('--size', size + 'px');
+      petal.style.setProperty('--x', Math.random() * 100 + '%');
+      petal.style.setProperty('--opacity', 0.4 + Math.random() * 0.5);
+      petal.style.setProperty('--duration', 6 + Math.random() * 8 + 's');
+      petal.style.setProperty('--delay', Math.random() * -14 + 's');
+      petal.style.setProperty('--sway-duration', 3 + Math.random() * 4 + 's');
+      petal.style.setProperty('--sway-x', (20 + Math.random() * 40) + 'px');
+      petal.style.setProperty('--spin-duration', 4 + Math.random() * 6 + 's');
+      petalsContainer.appendChild(petal);
+    }
+  }
+
+  // ===== Utils =====
+  function clamp(val, min, max) {
+    return Math.max(min, Math.min(max, val));
+  }
+
+})();
+</script>
+</body>
+</html>
